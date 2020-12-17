@@ -8,7 +8,6 @@
             <div class="panel-heading">Order Pizza</div>
 
             <div class="panel-body">
-              <div class="alert alert-success"></div>
 
               <div class="row">
                 <div class="col-lg-12">
@@ -165,9 +164,9 @@
                       <div class="col-sm-10">
                         <select v-model="selected">
                       <option disabled value="">Please select status</option>
-                      <option>Delivered</option>
-                      <option>Yet to be deliver</option>
+                      <option>Order Received</option>
                       <option>Preparing</option>
+                      <option>Ready to Serve</option>
                     </select>
                       </div>
                     </div>
@@ -178,7 +177,7 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                       <div class="col-sm-4 col-sm-offset-2">
-                        <button class="btn btn-success" type="submit" @click="saveData()">
+                        <button class="btn btn-success" type="submit" @click.prevent="saveData()">
                           Order Now
                         </button>
                       </div>
@@ -217,6 +216,7 @@ export default {
 
   methods: {
   saveData(){
+  
     var data ={
       order:this.orderid,
       name:this.name,
@@ -232,6 +232,16 @@ this.$router.push('/');
 
   }
   },
+  mounted(){
+   
+    if(JSON.parse(localStorage.getItem('uservalue')) === null ){
+        this.userData= []
+    }else{
+      
+      this.userData=JSON.parse(localStorage.getItem('uservalue'))
+    }
+    
+  }
 };
 </script>
 <style>

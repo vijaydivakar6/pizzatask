@@ -15,7 +15,7 @@
                   <th>Toppings</th>
                   <th>Instructions</th>
                   <th>Status</th>
-                  <th>View Status</th>
+                  <th>Change Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -24,7 +24,7 @@
                   <td>{{item.name}}</td>
                   <td>{{item.address}}</td>
                   <td>{{item.checkednames}}</td>
-                  <td>{{item.checkedboxs}}</td>
+                  <td>{{item.checkedboxs | strippedContent }}</td>
                   <td>{{item.instruction}}</td>
                   <td >{{item.selected}}</td>
                   <td><button @click="editUser(item)">View</button></td>
@@ -67,7 +67,14 @@ created () {
     localStorage.setItem('myEdit',JSON.stringify(displayUserData));
     this.$router.push('/editorder');
   }
+    },
+    filters: {
+    strippedContent: function(str) {
+           return str.toString().replace(/<\/?[^>]+>/ig, " "); 
     }
+},
+
+
 };
 </script>
 <style>

@@ -8,8 +8,6 @@
             <div class="panel-heading">Edit Order Status</div>
 
             <div class="panel-body">
-              <div class="alert alert-success"></div>
-
             <div class="row">
                 <div class="col-lg-12">
                   <form class="form-horizontal">
@@ -70,7 +68,7 @@
                               value="large"
                               id="large"
                               name="size"
-                          v-model="checkedNames"  disabled="disabled" />
+                          v-model="user.checkedNames"  disabled="disabled" />
                             Large
                           </label>
                         </div>
@@ -178,7 +176,7 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                       <div class="col-sm-4 col-sm-offset-2">
-                        <button class="btn btn-success" type="submit" @click="updateMe()">
+                        <button class="btn btn-success" type="submit" @click.prevent="updateMe()">
                           Update Now
                         </button>
                       </div>
@@ -212,9 +210,10 @@ export default {
      editValue:[]
     };
   },
-   created (){
-     	var data=JSON.parse(localStorage.getItem('myEdit'));	
-  	console.log(data)
+   beforeMount (){
+    console.log('mounted')
+    var data=JSON.parse(localStorage.getItem('myEdit'));	
+    console.log(data)
   	this.user.orderid = data.order ;	 
   	this.user.name=data.name;
   	this.user.address=data.address;
@@ -225,25 +224,27 @@ export default {
     this.editValue =data
     
    },
+
   methods: {
     updateMe(){
-  	console.log(this.user);
-  	var dataValue=JSON.parse(localStorage.getItem('uservalue'))
-  	console.log(dataValue)
-  	const newState = dataValue.map(obj =>
-    obj.orderid === this.orderid ? { ...obj, 
-		 order:	this.user.orderid,
-      name:this.user.name,
-     address: this.user.address,
-     checkednames: this.user.checkedNames,
-     checkedboxs:this.user.checkedBoxs,
-     instruction:this.user.instructions,
-     selected:this.user.selected
-		} : obj
-	);
-	console.log(newState)
-  localStorage.setItem('uservalue', JSON.stringify(newState));
-  this.$router.push('/');
+  	
+    var dataValue=JSON.parse(localStorage.getItem('uservalue'))
+    for (const obj of dataValue) {
+      if(obj.order == this.user.orderid){
+          obj.name = this.user.name;
+          obj.address = this.user.address,
+          obj.checkednames= this.user.checkedNames,
+          obj.checkedboxs=this.user.checkedBoxs,
+          obj.instruction=this.user.instructions,
+          obj.selected=this.user.selected,
+          localStorage.setItem('uservalue', JSON.stringify(dataValue));
+          this.$router.push('/');
+          break;
+      }else{
+         console.log('no')
+      }
+
+    }
   }
   },
 }
